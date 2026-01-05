@@ -1,0 +1,286 @@
+
+---
+
+# Cloud Network Design Patterns: Hub‑Spoke and Landing Zones (Part 3)
+
+*Cloud Architecture • Networking • Hub‑Spoke • Landing Zones • AWS • Azure • GCP • OCI*
+
+---
+
+## Why Network Design Patterns Matter in the Cloud
+
+Most cloud networking failures are not caused by:
+- Missing services
+- Weak security tools
+- Platform limitations  
+
+They are caused by **poor network design choices made early**.
+
+As environments grow, ad‑hoc VPCs and flat networks become:
+- Hard to secure
+- Hard to scale
+- Hard to govern
+- Expensive to fix
+
+This article introduces **two foundational cloud network design patterns** used by enterprises at scale:
+
+1. **Hub‑Spoke Architecture**
+2. **Cloud Landing Zone Networking**
+
+These patterns are **cloud‑agnostic** and apply equally to AWS, Azure, GCP, and OCI.
+
+---
+
+## Cloud Network Design Goals (Architect View)
+
+Before patterns, clarify the goals:
+
+✅ Strong isolation between workloads  
+✅ Centralized security and connectivity  
+✅ Scalable onboarding of new environments  
+✅ Consistent governance and compliance  
+✅ Support for hybrid and multi‑cloud  
+
+> **Architect rule:**  
+> Network design must scale **organizationally**, not just technically.
+
+---
+
+## Pattern 1: Hub‑Spoke Architecture
+
+### What Is Hub‑Spoke?
+
+In a **Hub‑Spoke** model:
+- A central **Hub network** provides shared services
+- Multiple **Spoke networks** host workloads
+- All traffic flows through the hub for inspection and control
+
+---
+
+### Hub‑Spoke Reference Architecture
+
+```mermaid
+flowchart TB
+    Internet --> HubFW[Central Firewall / WAF]
+    HubFW --> HubLB[Shared Load Balancer]
+
+    HubFW --> SpokeA[Spoke VPC A<br/>App Workloads]
+    HubFW --> SpokeB[Spoke VPC B<br/>App Workloads]
+    HubFW --> SpokeC[Spoke VPC C<br/>App Workloads]
+
+    OnPrem[On-Prem Data Center]
+    OnPrem --> Hybrid[VPN / Dedicated Link]
+    Hybrid --> HubFW
+```
+
+---
+
+### What Belongs in the Hub?
+
+✅ Central firewalls  
+✅ WAF and ingress controllers  
+✅ NAT / egress inspection  
+✅ DNS and directory services  
+✅ Shared monitoring and logging  
+✅ Hybrid connectivity (VPN / Direct Connect / ExpressRoute)
+
+---
+
+### What Belongs in the Spokes?
+
+✅ Application workloads  
+✅ Environment‑specific services  
+✅ Minimal routing and firewall rules  
+✅ No direct internet exposure (in mature setups)
+
+---
+
+### When to Use Hub‑Spoke
+
+✅ Multiple applications or business units  
+✅ Strong security and compliance requirements  
+✅ Hybrid connectivity needed  
+✅ Centralized network operations team  
+
+---
+
+### Hub‑Spoke: Pros and Cons
+
+✅ **Pros**
+- Centralized security
+- Easier governance
+- Predictable traffic flows
+- Reduced duplication
+
+⚠️ **Cons**
+- Hub can become a bottleneck
+- More complex routing
+- Requires strong operational discipline
+
+---
+
+## Provider Mapping: Hub‑Spoke
+
+| Provider | Implementation |
+|------|----------------|
+| AWS | Transit VPC + TGW |
+| Azure | Hub VNet + VNet Peering |
+| GCP | Shared VPC / Hub Project |
+| OCI | Hub VCN + DRG |
+
+---
+
+## Pattern 2: Cloud Landing Zone Networking
+
+### What Is a Landing Zone?
+
+A **Landing Zone** is a **pre‑configured, governed cloud environment** that provides:
+
+- Standardized network architecture
+- Security guardrails
+- Identity and access controls
+- Logging and monitoring
+- Compliance alignment
+
+Think of it as the **enterprise cloud foundation**.
+
+---
+
+## Landing Zone Network Architecture
+
+```mermaid
+flowchart TB
+    subgraph LandingZone["Enterprise Landing Zone"]
+        Hub[Connectivity & Security Hub]
+        Mgmt[Management Network]
+        Shared[Shared Services Network]
+    end
+
+    Hub --> Prod[Production Spokes]
+    Hub --> NonProd[Non-Production Spokes]
+
+    OnPrem --> Hybrid[VPN / Dedicated Link]
+    Hybrid --> Hub
+```
+
+---
+
+### Core Landing Zone Network Components
+
+#### 1. Connectivity Hub
+- Central ingress and egress
+- Firewalls and WAF
+- Hybrid connectivity
+- Traffic inspection
+
+#### 2. Management Network
+- Bastion hosts
+- Monitoring systems
+- Backup and patching
+- Security tooling
+
+#### 3. Shared Services Network
+- DNS
+- Identity services
+- Artifact repositories
+- Internal APIs
+
+#### 4. Workload Spokes
+- Application‑specific VPCs/VNets
+- Strong isolation
+- Minimal shared dependencies
+
+---
+
+### Environment Isolation in Landing Zones
+
+✅ Separate accounts/subscriptions/projects  
+✅ Separate VPCs/VNets/VCNs  
+✅ Separate IAM boundaries  
+✅ Separate routing domains  
+
+> **Architect rule:**  
+> Environment isolation is non‑negotiable in regulated enterprises.
+
+---
+
+## Hub‑Spoke vs Landing Zone: Key Differences
+
+| Aspect | Hub‑Spoke | Landing Zone |
+|----|----|----|
+| Scope | Network pattern | Enterprise foundation |
+| Focus | Traffic control | Governance + security |
+| Complexity | Medium | High |
+| Scale | Team / BU level | Organization‑wide |
+| Governance | Limited | Strong |
+| Automation | Optional | Mandatory |
+
+✅ **Most enterprises use both**  
+Landing Zone = framework  
+Hub‑Spoke = networking pattern inside it
+
+---
+
+## Advanced Design Considerations
+
+### 1. Transitive Routing
+- Control which spokes can talk to each other
+- Avoid accidental full‑mesh connectivity
+- Use route tables deliberately
+
+### 2. Scaling Firewalls
+- Design for throughput, not just rules
+- Plan HA and failover
+- Monitor saturation early
+
+### 3. Multi‑Region Expansion
+- Regional hubs
+- Central policy enforcement
+- Avoid single global choke points
+
+---
+
+## Common Architecture Mistakes ❌
+
+❌ Single shared VPC for everything  
+❌ No separation between Prod and Non‑Prod  
+❌ Direct internet access from spokes  
+❌ No central egress control  
+❌ Manual network changes outside IaC  
+
+These mistakes are **expensive to fix later**.
+
+---
+
+## Design Pattern Selection Guide
+
+| Scenario | Recommended Pattern |
+|------|---------------------|
+| Small team / single app | Simple VPC |
+| Multiple apps | Hub‑Spoke |
+| Regulated enterprise | Landing Zone + Hub‑Spoke |
+| Hybrid connectivity | Hub‑Spoke |
+| Multi‑cloud | Landing Zone model |
+
+---
+
+## Final Thoughts
+
+Cloud networking success is not about choosing the “right service” —  
+it’s about choosing the **right pattern early**.
+
+✅ Hub‑Spoke enables control and visibility  
+✅ Landing Zones enable scale and governance  
+✅ Together, they form the backbone of enterprise cloud adoption  
+
+When designed correctly, these patterns:
+- Reduce risk
+- Accelerate delivery
+- Enable security by default
+
+---
+
+## What’s Next in This Series?
+
+✅ **Part 4: Multi‑Cloud & Inter‑Cloud Networking Patterns**  
+
