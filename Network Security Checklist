@@ -1,0 +1,226 @@
+
+# Cloud Network Security Checklist (Cloud Architect Edition)
+
+*AWS • Azure • Google Cloud • OCI • Zero Trust • VPC Security*
+
+---
+
+## Why This Checklist Exists
+
+In the cloud, **network security failures are rarely caused by missing tools**.  
+They are caused by **architectural decisions**.
+
+As a Cloud Architect, your responsibility is not just to “make it work,” but to:
+- Reduce blast radius
+- Enforce explicit trust
+- Prevent lateral movement
+- Design for audit, scale, and failure
+
+This checklist distills **real‑world cloud security architecture practices** into a **practical, provider‑agnostic guide** you can use during design reviews, landing zone builds, and pre‑production sign‑off.
+
+---
+
+## How to Use This Checklist
+
+✅ Architecture design reviews  
+✅ Landing zone validation  
+✅ Pre‑production go‑live checks  
+✅ Security and compliance assessments  
+✅ Well‑Architected / CAF / NIST alignment  
+
+> **Architect mindset:**  
+> *Assume breach. Minimize impact. Log everything.*
+
+---
+
+## 1. Network Architecture & Segmentation ✅
+
+### Environment Isolation
+- ⬜ Separate **Production and Non‑Production** environments
+- ⬜ Dedicated VPC / VNet / VCN per environment
+- ⬜ CIDR ranges planned to avoid future overlap (hybrid, peering, multi‑cloud)
+
+### Subnet Design
+- ⬜ Public subnets used **only** for ingress components
+- ⬜ Application and database tiers in **private subnets**
+- ⬜ No flat networks across tiers
+- ⬜ Routing between tiers explicitly defined
+
+✅ **Architect Rule:**  
+> If everything can talk to everything, the design is already compromised.
+
+---
+
+## 2. Ingress Security (North–South Traffic) ✅
+
+- ⬜ Internet traffic terminates at **Load Balancer + WAF**
+- ⬜ No public IPs on application or database workloads
+- ⬜ TLS enforced with modern cipher suites
+- ⬜ DDoS protection enabled using native services
+
+**Provider Examples**
+- AWS: ALB + WAF + Shield
+- Azure: Application Gateway + WAF
+- GCP: Global Load Balancer + Cloud Armor
+- OCI: OCI Load Balancer + WAF
+
+---
+
+## 3. Firewall Strategy (Layered by Design) ✅
+
+### Workload‑Level Firewalls (Primary Control)
+- ⬜ Default **deny‑all** inbound rules
+- ⬜ Only required ports explicitly allowed
+- ⬜ Source restricted to known subnets or security groups
+- ⬜ No `0.0.0.0/0` unless explicitly justified
+
+### Subnet‑Level Controls (Secondary Control)
+- ⬜ Used for coarse‑grained filtering only
+- ⬜ Stateless rules documented and reviewed
+- ⬜ Rule ordering tested
+
+✅ **Architect Rule:**  
+> Security Groups / NSGs first. Network ACLs second.
+
+---
+
+## 4. East–West Traffic (Lateral Movement Control) ✅
+
+- ⬜ Explicit allow rules between tiers only
+- ⬜ App tier cannot reach DB tier except required ports
+- ⬜ No transitive trust across subnets
+- ⬜ Sensitive workloads further isolated (micro‑segmentation where needed)
+
+✅ **Goal:**  
+Limit attacker movement after initial compromise.
+
+---
+
+## 5. Private Access to Cloud Services (Zero Public Exposure) ✅
+
+- ⬜ All PaaS services accessed via **private endpoints**
+- ⬜ Public service endpoints disabled
+- ⬜ Private DNS resolution configured correctly
+- ⬜ Traffic stays on provider backbone
+
+**Provider Mapping**
+- AWS: PrivateLink
+- Azure: Private Link
+- GCP: Private Google Access
+- OCI: Service Gateway
+
+✅ **Outcome:**  
+No internet exposure, stronger compliance posture.
+
+---
+
+## 6. Egress Traffic Control (High‑Risk Area) ✅
+
+- ⬜ No direct internet access from private workloads
+- ⬜ Centralized NAT or firewall for outbound traffic
+- ⬜ Egress allow‑listing implemented where feasible
+- ⬜ TLS inspection considered (compliance permitting)
+- ⬜ Outbound traffic logging enabled
+
+✅ **Architect Rule:**  
+> Most real‑world breaches involve outbound traffic. Treat egress as critical.
+
+---
+
+## 7. Hybrid Connectivity Security ✅
+
+- ⬜ VPN tunnels encrypted using IPsec / IKEv2
+- ⬜ Dedicated connections used for production workloads
+- ⬜ Route filtering applied (no full route propagation)
+- ⬜ Hybrid traffic separated from internet traffic
+- ⬜ Connectivity paths documented and reviewed
+
+**Recommended Order**
+1. VPN (initial)
+2. Dedicated link
+3. VPN over dedicated link (highest security)
+
+---
+
+## 8. Identity‑Aware Networking (Zero Trust Alignment) ✅
+
+- ⬜ No implicit trust based on network location
+- ⬜ Identity‑based access where supported
+- ⬜ Admin access via bastion / jump host only
+- ⬜ MFA enforced for all privileged roles
+- ⬜ No direct SSH/RDP from the internet
+
+---
+
+## 9. Logging, Monitoring & Visibility ✅
+
+### Mandatory Logs
+- ⬜ VPC / VNet / VCN Flow Logs enabled
+- ⬜ Firewall logs enabled
+- ⬜ Load balancer access logs enabled
+- ⬜ VPN and gateway logs enabled
+
+### Operational Readiness
+- ⬜ Logs centralized in SIEM
+- ⬜ Retention aligned with compliance
+- ⬜ Alerts configured for anomalous traffic
+- ⬜ Logging not disabled to reduce cost
+
+✅ **Architect Rule:**  
+> If you can’t see the traffic, you can’t secure it.
+
+---
+
+## 10. High Availability & Resilience ✅
+
+- ⬜ Subnets span multiple AZs / fault domains
+- ⬜ NAT, firewalls, and gateways are highly available
+- ⬜ No single point of failure in traffic path
+- ⬜ Failover tested—not assumed
+
+---
+
+## 11. Governance, Compliance & Drift Control ✅
+
+- ⬜ Network design mapped to standards (ISO, NIST, CIS)
+- ⬜ Guardrails enforced via policy (IaC / Policy‑as‑Code)
+- ⬜ Configuration drift detection enabled
+- ⬜ Periodic security architecture reviews scheduled
+
+---
+
+## 12. Architecture Red Flags (Fail Fast) ❌
+
+❌ Flat network with no segmentation  
+❌ Public IPs on databases  
+❌ Overly permissive firewall rules  
+❌ No egress controls  
+❌ Logging disabled for cost savings  
+❌ Manual changes outside Infrastructure as Code  
+
+> Any one of these should **block production go‑live**.
+
+---
+
+## Executive Summary (Cloud Architect View)
+
+✅ Cloud network security is **architecture‑driven**  
+✅ Segmentation is non‑negotiable  
+✅ Private access beats perimeter defense  
+✅ Egress control is critical  
+✅ Logging is a security feature, not an optional cost  
+
+When designed correctly, **cloud networking can be more secure than traditional data centers**.
+
+---
+
+### Author Bio
+
+**Monowar Mukul** is a Cloud Solution Designer with over two decades of experience across infrastructure, databases, applications, and DevOps. He has delivered large‑scale cloud transformation initiatives across education, energy, government, mining, transport, and finance sectors in Australia. He holds professional architect certifications from **AWS, Microsoft Azure, Google Cloud, and Oracle Cloud Infrastructure**.
+
+---
+
+### Suggested Medium Tags
+`Cloud Security` `Cloud Architecture` `AWS` `Azure` `Google Cloud` `DevOps` `Zero Trust` `Networking`
+
+---
