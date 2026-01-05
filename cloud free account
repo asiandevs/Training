@@ -1,0 +1,332 @@
+---
+
+# How to Create Free Tier Accounts on AWS, Azure, GCP, and OCI  
+### A Step‑by‑Step Beginner Cloud Guide with Architecture Diagrams
+
+**Monowar Mukul**  
+*Cloud Administrator | Cloud & DevOps Enthusiast*  
+⏱️ 7 min read
+
+---
+
+## 🚀 Introduction
+
+If you are starting your journey in **cloud computing**, one of the smartest and safest first steps is creating a **Cloud Free Tier account**.
+
+Major cloud providers—**Amazon Web Services (AWS)**, **Microsoft Azure**, **Google Cloud Platform (GCP)**, and **Oracle Cloud Infrastructure (OCI)**—offer Free Tier accounts that allow you to **learn, experiment, and build real cloud resources** without immediate cost.
+
+In this guide, you will learn:
+
+- What a Cloud Free Tier is  
+- Why it’s ideal for beginners  
+- How to create Free Tier accounts step by step  
+- How to avoid unexpected charges  
+- How cloud resources connect using simple architecture diagrams  
+
+---
+
+## 🔍 What Is a Cloud Free Tier?
+
+A **Cloud Free Tier** is a limited usage offering provided by cloud vendors that allows users to access selected services **at no cost**, within defined quotas.
+
+Typical Free Tier services include:
+- Virtual machines (compute)
+- Storage services
+- Networking basics
+- Monitoring and logging
+- Billing and cost controls
+
+---
+
+## 🏗️ Cloud Free Tier – High‑Level Architecture
+
+> **Place Diagram Image Here**
+
+```mermaid
+flowchart TD
+    User[User / Laptop]
+    Internet[Internet]
+    Cloud[Cloud Provider<br/>(AWS / Azure / GCP / OCI)]
+
+    Compute[Compute<br/>(Virtual Machine)]
+    Storage[Storage]
+    Network[Networking]
+    Monitoring[Monitoring]
+    Billing[Billing]
+
+    User --> Internet --> Cloud
+    Cloud --> Compute
+    Cloud --> Storage
+    Cloud --> Network
+    Cloud --> Monitoring
+    Cloud --> Billing
+```
+
+**Explanation:**  
+This diagram shows how a user connects over the internet to a cloud provider and consumes Free Tier services such as compute, storage, networking, and billing monitoring.
+
+---
+
+## ☁️ Step‑by‑Step: Create an AWS Free Tier Account
+
+### Step 1: Visit AWS Free Tier  
+👉 https://aws.amazon.com/free
+
+### Step 2: Create an AWS Account  
+Click **“Create an AWS Account”** and sign in using an existing Amazon account or create a new one.
+
+### Step 3: Enter Account Information  
+- Email address  
+- Password  
+- AWS account name  
+
+### Step 4: Add Contact Details  
+- Full name  
+- Address  
+- Phone number  
+
+### Step 5: Payment Verification  
+Add a credit or debit card.  
+✅ You will **not be charged** unless Free Tier limits are exceeded.
+
+### Step 6: Phone Verification  
+Enter the OTP sent to your phone.
+
+### Step 7: Choose Support Plan  
+Select **Basic Support (Free)**.
+
+### Step 8: Sign in to AWS Console  
+👉 https://aws.amazon.com/console
+
+✅ AWS Free Tier account is ready.
+
+---
+
+## 🧩 AWS Free Tier Starter Architecture
+
+> **Place Diagram Image Here**
+
+```mermaid
+flowchart TD
+    User[User]
+    Internet[Internet]
+    AWS[AWS Cloud]
+
+    VPC[VPC]
+    Subnet[Public Subnet]
+    EC2[EC2 Instance<br/>(Free Tier)]
+    S3[S3 Bucket]
+    IAM[IAM User]
+    CW[CloudWatch]
+    Billing[AWS Billing Alerts]
+
+    User --> Internet --> AWS
+    AWS --> VPC
+    VPC --> Subnet
+    Subnet --> EC2
+    AWS --> S3
+    AWS --> IAM
+    AWS --> CW
+    AWS --> Billing
+```
+
+**Explanation:**  
+This represents a basic AWS Free Tier learning setup using an EC2 instance, S3 storage, IAM access, and billing alerts.
+
+---
+
+## ☁️ Step‑by‑Step: Create a Microsoft Azure Free Tier Account
+
+### Step 1: Visit Azure  
+👉 https://azure.microsoft.com
+
+### Step 2: Click **“Start free”**
+
+### Step 3: Sign in with Microsoft Account  
+Use an existing account or create a new one.
+
+### Step 4: Verify Identity  
+Verification is done via email or SMS.
+
+### Step 5: Add Payment Method  
+Used only for verification purposes.
+
+### Step 6: Accept Terms and Create Account
+
+### Step 7: Access Azure Portal  
+👉 https://portal.azure.com
+
+✅ Azure Free Tier account is active.
+
+---
+
+## 🧩 Azure Free Tier Learning Architecture
+
+> **Place Diagram Image Here**
+
+```mermaid
+flowchart TD
+    User[User]
+    Internet[Internet]
+    Azure[Azure Subscription]
+
+    RG[Resource Group]
+    VNet[Virtual Network]
+    VM[Virtual Machine<br/>(Free Tier)]
+    Storage[Storage Account]
+    Monitor[Azure Monitor]
+    Cost[Cost Management]
+
+    User --> Internet --> Azure
+    Azure --> RG
+    RG --> VNet
+    VNet --> VM
+    RG --> Storage
+    RG --> Monitor
+    RG --> Cost
+```
+
+**Explanation:**  
+Azure groups related services inside a **Resource Group**, which makes cleanup and cost management easier for beginners.
+
+---
+
+## ☁️ Step‑by‑Step: Create a Google Cloud Free Tier Account
+
+### Step 1: Visit Google Cloud  
+👉 https://cloud.google.com
+
+### Step 2: Click **“Get started for free”**
+
+### Step 3: Sign in with Google Account
+
+### Step 4: Set Up Billing Profile  
+Add card details (no charge unless upgraded).
+
+### Step 5: Accept Terms
+
+### Step 6: Open GCP Console  
+👉 https://console.cloud.google.com
+
+✅ GCP Free Tier account is ready.
+
+---
+
+## 🧩 Google Cloud Free Tier Architecture
+
+> **Place Diagram Image Here**
+
+```mermaid
+flowchart TD
+    User[User]
+    Internet[Internet]
+    Project[GCP Project]
+
+    VPC[VPC Network]
+    VM[Compute Engine VM<br/>(Free Tier)]
+    Storage[Cloud Storage Bucket]
+    Monitoring[Cloud Monitoring]
+    Billing[Billing Account]
+
+    User --> Internet --> Project
+    Project --> VPC
+    VPC --> VM
+    Project --> Storage
+    Project --> Monitoring
+    Project --> Billing
+```
+
+**Explanation:**  
+In GCP, a **Project** is the primary boundary for resources, access control, and billing.
+
+---
+
+## ☁️ Step‑by‑Step: Create an Oracle Cloud Free Tier Account
+
+### Step 1: Visit Oracle Cloud  
+👉 https://www.oracle.com/cloud
+
+### Step 2: Click **“Try Oracle Cloud Free Tier”**
+
+### Step 3: Register Using Email
+
+### Step 4: Verify Email and Identity
+
+### Step 5: Add Payment Method
+
+### Step 6: Log in to OCI Console
+
+✅ OCI Free Tier account activated.
+
+---
+
+## 🧩 Oracle Cloud Always Free Architecture
+
+> **Place Diagram Image Here**
+
+```mermaid
+flowchart TD
+    User[User]
+    Internet[Internet]
+    OCI[OCI Tenancy]
+
+    VCN[Virtual Cloud Network]
+    Compute[Compute Instance<br/>(Always Free)]
+    Block[Block Volume]
+    Object[Object Storage]
+    Monitor[Monitoring & Identity]
+
+    User --> Internet --> OCI
+    OCI --> VCN
+    VCN --> Compute
+    OCI --> Block
+    OCI --> Object
+    OCI --> Monitor
+```
+
+**Explanation:**  
+Oracle provides **Always Free resources**, making OCI a strong platform for long‑term cloud practice.
+
+---
+
+## 💰 Cost Monitoring & Billing Safety
+
+> **Place Diagram Image Here**
+
+```mermaid
+flowchart LR
+    Resources[Cloud Resources]
+    Metrics[Usage Metrics]
+    Billing[Billing Service]
+    Alerts[Budgets & Alerts]
+    Email[Email / Notification]
+
+    Resources --> Metrics
+    Metrics --> Billing
+    Billing --> Alerts
+    Alerts --> Email
+```
+
+**Explanation:**  
+This flow shows how cloud usage is tracked and alerts are triggered before any charges occur.
+
+---
+
+## ✅ Best Practices to Avoid Unexpected Charges
+
+- Enable billing alerts immediately  
+- Monitor usage dashboards daily  
+- Stop or delete unused virtual machines  
+- Remove test resources after learning  
+- Never leave Free Tier workloads running unnecessarily  
+
+---
+
+## 🧠 Final Thoughts
+
+Cloud Free Tier accounts are the **best entry point into cloud computing**. They provide real, hands‑on experience on enterprise‑grade platforms—without financial risk.
+
+Whether your goal is **Cloud Administration, DevOps, or Cloud Architecture**, mastering Free Tier environments builds a strong foundation for real‑world cloud workloads.
+
+---
+
