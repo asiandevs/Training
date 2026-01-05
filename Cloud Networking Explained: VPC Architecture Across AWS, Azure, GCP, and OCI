@@ -1,0 +1,258 @@
+---
+
+# Cloud Networking Explained: VPC Architecture Across AWS, Azure, GCP, and OCI (2025 Guide)
+
+*Cloud Networking • VPC • AWS • Azure • Google Cloud • Oracle Cloud*
+
+---
+
+## Why Cloud Networking Matters More Than Ever
+
+Cloud networking is no longer just about IP ranges and subnets. It is the **foundation of security, scalability, hybrid connectivity, and cloud‑native architecture**.
+
+Whether you are:
+- Migrating workloads from on‑premises
+- Designing a secure multi‑tier application
+- Implementing hybrid or multi‑cloud strategies
+
+A solid understanding of **Virtual Private Cloud (VPC)** design is essential.
+
+This article covers:
+- Core VPC concepts (cloud‑agnostic)
+- How AWS, Azure, GCP, and OCI implement networking
+- A **side‑by‑side comparison table**
+- **Provider‑specific architecture diagrams** using a single real‑world scenario
+
+---
+
+## What Is a Virtual Private Cloud (VPC)?
+
+A **Virtual Private Cloud (VPC)** is a logically isolated, software‑defined network within a public cloud that you fully control.
+
+With a VPC, you can:
+- Define private IP address ranges (CIDR)
+- Segment workloads using subnets
+- Control traffic routing
+- Apply layered network security
+- Connect securely to on‑premises or other clouds
+
+> In practice, a VPC functions like your own private data center—without managing physical hardware.
+
+---
+
+## Core Cloud Networking Components (Universal Concepts)
+
+All major cloud providers share the same foundational networking concepts:
+
+| Component | Description |
+|--------|------------|
+| CIDR & IP Addressing | Private IPv4 / IPv6 address space |
+| Subnets | Logical network segmentation |
+| Route Tables | Control traffic flow |
+| Internet Access | Internet Gateway & NAT |
+| Firewalls | Stateful & stateless controls |
+| Private Connectivity | Peering, VPN, Dedicated links |
+| Observability | Flow logs and traffic monitoring |
+
+---
+
+## Real‑World Reference Architecture Used in This Article
+
+**Scenario:**  
+A secure, highly available **hybrid cloud web application** with:
+
+- Public web tier
+- Private application tier
+- Private database tier
+- Outbound internet via NAT
+- On‑premises connectivity via VPN or dedicated connection
+
+This same architecture is mapped consistently across all providers.
+
+---
+
+## AWS VPC – Reference Architecture
+
+In AWS, a VPC is **regional** and spans multiple Availability Zones.
+
+```mermaid
+flowchart TB
+    Internet --> ALB[Application Load Balancer]
+    ALB --> Web[Web Tier<br/>Public Subnet]
+
+    Web --> App[App Tier<br/>Private Subnet]
+    App --> DB[RDS / Database<br/>Private Subnet]
+
+    App --> NAT[NAT Gateway]
+    NAT --> IGW[Internet Gateway]
+    IGW --> Internet
+
+    OnPrem[On-Prem Data Center]
+    OnPrem --> VPN[Site-to-Site VPN<br/>or Direct Connect]
+    VPN --> VPC[AWS VPC]
+```
+
+**Key AWS Networking Services**
+- VPC, Subnets (AZ‑specific)
+- Internet Gateway & NAT Gateway
+- Security Groups (stateful)
+- Network ACLs (stateless)
+- VPC Peering
+- Site‑to‑Site VPN & Direct Connect
+
+AWS networking is known for **maturity, granular security controls, and deep service integration**.
+
+---
+
+## Azure Virtual Network (VNet) – Reference Architecture
+
+Azure networking is designed with **enterprise hybrid connectivity** as a first‑class feature.
+
+```mermaid
+flowchart TB
+    Internet --> AGW[Application Gateway]
+    AGW --> Web[Web Tier<br/>Public Subnet]
+
+    Web --> App[App Tier<br/>Private Subnet]
+    App --> DB[Azure SQL / DB<br/>Private Subnet]
+
+    App --> NAT[NAT Gateway]
+    NAT --> Internet
+
+    OnPrem[On-Prem Data Center]
+    OnPrem --> VPN[VPN Gateway<br/>or ExpressRoute]
+    VPN --> VNet[Azure VNet]
+```
+
+**Key Azure Networking Services**
+- Virtual Network (VNet)
+- Network Security Groups (NSGs)
+- Azure Private Link
+- User‑Defined Routes (UDR)
+- VPN Gateway & ExpressRoute
+- Azure Bastion
+- VNet Peering
+
+Azure excels in **hybrid networking and private access to PaaS services**.
+
+---
+
+## Google Cloud VPC – Global Network Architecture
+
+Google Cloud uses a **global VPC model**, which is unique among major cloud providers.
+
+```mermaid
+flowchart TB
+    Internet --> GLB[Global HTTP(S)<br/>Load Balancer]
+    GLB --> Web[Web Tier<br/>Regional Subnet]
+
+    Web --> App[App Tier<br/>Regional Subnet]
+    App --> DB[Cloud SQL / DB<br/>Private IP]
+
+    App --> NAT[Cloud NAT]
+    NAT --> Internet
+
+    OnPrem[On-Prem Data Center]
+    OnPrem --> VPN[HA VPN<br/>or Interconnect]
+    VPN --> VPC[GCP Global VPC]
+```
+
+**Key GCP Networking Services**
+- Global VPC
+- Regional subnets
+- Centralized firewall rules
+- Cloud Router (BGP)
+- Cloud NAT
+- Shared VPC
+- Private Google Access
+- Global HTTP(S) Load Balancer
+
+GCP stands out for **global scale, performance, and simplified network design**.
+
+---
+
+## Oracle Cloud Infrastructure (OCI) – VCN Architecture
+
+OCI networking focuses on **performance, predictability, and enterprise workloads**.
+
+```mermaid
+flowchart TB
+    Internet --> LB[OCI Load Balancer]
+    LB --> Web[Web Tier<br/>Public Subnet]
+
+    Web --> App[App Tier<br/>Private Subnet]
+    App --> DB[Autonomous DB / DB<br/>Private Subnet]
+
+    App --> NAT[NAT Gateway]
+    NAT --> IGW[Internet Gateway]
+    IGW --> Internet
+
+    OnPrem[On-Prem Data Center]
+    OnPrem --> VPN[VPN Connect<br/>or FastConnect]
+    VPN --> DRG[Dynamic Routing Gateway]
+    DRG --> VCN[OCI VCN]
+```
+
+**Key OCI Networking Services**
+- Virtual Cloud Network (VCN)
+- Internet & NAT Gateways
+- Security Lists & Network Security Groups
+- Dynamic Routing Gateway (DRG)
+- Local & Remote Peering
+- VPN Connect & FastConnect
+
+OCI is well‑suited for **high‑performance and database‑centric architectures**.
+
+---
+
+## Cloud Networking Comparison Table
+
+| Feature | AWS | Azure | GCP | OCI |
+|------|-----|------|-----|-----|
+| VPC Scope | Regional | Regional | **Global** | Regional |
+| Subnet Scope | AZ‑based | Regional | Regional | Regional / AD |
+| Firewall Model | SG + NACL | NSG | Central Firewall | NSG + Sec Lists |
+| NAT Service | NAT Gateway | NAT Gateway | Cloud NAT | NAT Gateway |
+| Load Balancer | ALB / NLB | App Gateway | Global LB | OCI LB |
+| Hybrid VPN | Site‑to‑Site VPN | VPN Gateway | HA VPN | VPN Connect |
+| Dedicated Link | Direct Connect | ExpressRoute | Interconnect | FastConnect |
+| Private PaaS Access | PrivateLink | Private Link | Private Google Access | Service Gateway |
+
+---
+
+## Key Design Takeaways
+
+- VPC fundamentals are **cloud‑agnostic**
+- Security should be layered (subnet + workload)
+- Hybrid connectivity is essential for enterprises
+- AWS offers the richest ecosystem
+- Azure leads in enterprise hybrid use cases
+- GCP simplifies global networking
+- OCI delivers predictable performance
+
+---
+
+## Final Thoughts
+
+Cloud networking is not about memorizing provider‑specific services—it’s about understanding **architecture patterns**.
+
+Once you master:
+- Traffic flow
+- Network segmentation
+- Security boundaries
+- Hybrid connectivity
+
+You can design **secure, scalable, and resilient architectures on any cloud platform**.
+
+---
+
+### Author Bio
+
+**Monowar Mukul** is a Cloud Solution Designer with over two decades of experience across infrastructure, databases, applications, and DevOps. He has led large‑scale cloud transformation initiatives across education, energy, government, mining, transport, and finance sectors in Australia. Monowar holds professional architect certifications from **AWS, Microsoft Azure, Google Cloud, and Oracle Cloud Infrastructure**.
+
+---
+
+### Suggested Medium Tags
+`Cloud Computing` `Cloud Networking` `AWS` `Azure` `Google Cloud` `Oracle Cloud` `DevOps` `Cloud Architecture`
+
+---
